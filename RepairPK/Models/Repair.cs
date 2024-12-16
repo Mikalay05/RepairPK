@@ -8,8 +8,8 @@
         public DateTime RepairDate { get; set; }
         public string Description { get; set; }
         public decimal Cost { get; set; }
-        public int PartId { get; set; }
-        public Part Part { get; set; }
+        public int? PartId { get; set; }
+        public Part? Part { get; set; }
         public int CountPart { get; set; }
 
     }
