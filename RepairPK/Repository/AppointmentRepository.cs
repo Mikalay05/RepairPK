@@ -1,6 +1,9 @@
-﻿namespace RepairPK.Repository
+﻿using RepairPK.Contracts;
+using RepairPK.Models;
+
+namespace RepairPK.Repository
 {
-    public class AppointmentRepository
+    public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRepository
     {
     }
 }
