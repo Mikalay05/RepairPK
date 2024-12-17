@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using RepairPK.Repository;
+
 namespace RepairPK
 {
     public class Program
@@ -8,6 +11,10 @@ namespace RepairPK
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            var connectionString = builder.Configuration.GetConnectionString("MySQLinDB");
+            builder.Services.AddDbContextPool<RepositoryContext>(
+                options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             var app = builder.Build();
 
