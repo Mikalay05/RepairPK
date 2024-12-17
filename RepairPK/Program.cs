@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RepairPK.Contracts;
 using RepairPK.Repository;
 
 namespace RepairPK
@@ -15,6 +16,8 @@ namespace RepairPK
             var connectionString = builder.Configuration.GetConnectionString("MySQLinDB");
             builder.Services.AddDbContextPool<RepositoryContext>(
                 options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             var app = builder.Build();
 
