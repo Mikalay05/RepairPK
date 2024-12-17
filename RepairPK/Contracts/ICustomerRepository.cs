@@ -1,10 +1,11 @@
-﻿using RepairPK.Models;
+﻿using RepairPK.Dto;
+using RepairPK.Models;
 
 namespace RepairPK.Contracts
 {
     public interface ICustomerRepository
     {
-        IEnumerable<Customer> GetAllCustomer(bool trachChanges);
-        Customer GetCustomer(int id, bool trackChanges);
+        IEnumerable<CustomerDto> GetAllCustomer(bool trackChanges);
+        CustomerDto GetCustomer(int id, bool trackChanges);
     }
 }

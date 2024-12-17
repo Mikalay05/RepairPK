@@ -16,8 +16,9 @@ namespace RepairPK
             var connectionString = builder.Configuration.GetConnectionString("MySQLinDB");
             builder.Services.AddDbContextPool<RepositoryContext>(
                 options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-            
+
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<IPartRepository, PartRepository>();
 
             var app = builder.Build();
 

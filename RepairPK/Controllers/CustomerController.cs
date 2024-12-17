@@ -15,7 +15,7 @@ namespace RepairPK.Controllers
         [HttpGet]
         public IActionResult GetAllCustomers()
         {
-            var customers = _customerRepository.GetAllCustomer(trachChanges: true);
+            var customers = _customerRepository.GetAllCustomer(trackChanges: true);
 
             return Ok(customers);
         }
