@@ -5,8 +5,6 @@
         decimal TotalAmount,
         DateTime CompletionDate,
         bool PaymentStatus,
-        int CustomerId,
-        string CustomerName,
-        List<HardwareDto> Hardwares
+        int CustomerId
     );
 }
