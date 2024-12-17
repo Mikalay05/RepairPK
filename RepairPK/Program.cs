@@ -19,6 +19,11 @@ namespace RepairPK
 
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IPartRepository, PartRepository>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            builder.Services.AddScoped<IPartRepository, PartRepository>();
+            builder.Services.AddScoped<IPartRepository, PartRepository>();
+            builder.Services.AddScoped<IPartRepository, PartRepository>();
+            builder.Services.AddScoped<IPartRepository, PartRepository>();
 
             var app = builder.Build();
 
