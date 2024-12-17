@@ -26,6 +26,7 @@ namespace RepairPK
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Repair API", Version = "v1" });
             });
+            
 
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IPartRepository, PartRepository>();
@@ -34,6 +35,8 @@ namespace RepairPK
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IHardwareRepository, HardwareRepository>();
             builder.Services.AddScoped<IRepairRepository, RepairRepository>();
+
+            builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
 

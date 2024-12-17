@@ -1,4 +1,5 @@
-﻿using RepairPK.Contracts;
+﻿using AutoMapper;
+using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
 
@@ -6,17 +7,18 @@ namespace RepairPK.Repository
 {
     public class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
     {
-        public CustomerRepository(RepositoryContext context) : base(context) { }
+        private readonly IMapper _mapper;
+        public CustomerRepository(RepositoryContext context, IMapper mapper) : base(context)
+        {
+            _mapper = mapper;
+        }
         public IEnumerable<CustomerDto> GetAllCustomer(bool trachChanges)
         {
             var customers = FindAll(trachChanges)
                 .OrderBy(c => c.Id)
                 .ToList();
 
-            var customersDto = customers.Select(c =>
-
-                new CustomerDto(c.Id, c.Name, c.PhoneNumber))
-                .ToList();
+            var customersDto = _mapper.Map<IEnumerable<CustomerDto>>(customers);
 
             return customersDto;
         }
@@ -25,7 +27,7 @@ namespace RepairPK.Repository
             var customer = FindByCondition(c => c.Id.Equals(id), trachChanges)
                 .SingleOrDefault();
 
-            var customerDto = new CustomerDto(customer.Id, customer.Name, customer.PhoneNumber);
+            var customerDto = _mapper.Map<CustomerDto>(customer);
             return customerDto;
         }
     }

@@ -19,6 +19,17 @@ namespace RepairPK.Controllers
 
             return Ok(customers);
         }
+        [HttpGet("{id}", Name = "GetCustomerById")]
+        public IActionResult GetCustomerById(int id)
+        {
+            var customer = _customerRepository.GetCustomer(id, true);
 
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customer);
+        }
     }
 }
