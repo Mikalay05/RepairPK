@@ -1,7 +1,6 @@
 ﻿namespace RepairPK.Contracts
 {
-    public interface IAppointmentRepository
+    public interface IHardwareRepository
     {
-
     }
 }
