@@ -1,4 +1,5 @@
-﻿using RepairPK.Contracts;
+﻿using AutoMapper;
+using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
 
@@ -6,7 +7,9 @@ namespace RepairPK.Repository
 {
     public class OrderRepository : RepositoryBase<Order>, IOrderRepository
     {
-        public OrderRepository(RepositoryContext context) : base(context) { }
+        private readonly IMapper _mapper;
+
+        public OrderRepository(RepositoryContext context, IMapper mapper) : base(context) { _mapper = mapper; }
         public IEnumerable<OrderDto> GetAllOrders(bool trachChanges)
         {
             var orders = FindAll(trachChanges)

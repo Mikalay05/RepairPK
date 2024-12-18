@@ -6,6 +6,7 @@ namespace RepairPK.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
+
         protected RepositoryContext _context;
 
         protected RepositoryBase(RepositoryContext context)

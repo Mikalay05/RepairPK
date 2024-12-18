@@ -1,4 +1,5 @@
-﻿using RepairPK.Contracts;
+﻿using AutoMapper;
+using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
 
@@ -6,7 +7,12 @@ namespace RepairPK.Repository
 {
     public class FeedbackRepository : RepositoryBase<Feedback>, IFeedbackRepository
     {
-        public FeedbackRepository(RepositoryContext context) : base(context) { }
+        private readonly IMapper _mapper;
+
+        public FeedbackRepository(RepositoryContext context, IMapper mapper) : base(context)
+        {
+            _mapper = mapper;
+        }
         public IEnumerable<FeedbackDto> GetAllFeedbacks(bool trachChanges)
         {
             var feedbacks = FindAll(trachChanges)

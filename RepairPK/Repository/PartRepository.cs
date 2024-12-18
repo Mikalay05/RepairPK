@@ -1,4 +1,5 @@
-﻿using RepairPK.Contracts;
+﻿using AutoMapper;
+using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
 
@@ -6,7 +7,9 @@ namespace RepairPK.Repository
 {
     public class PartRepository : RepositoryBase<Part>, IPartRepository
     {
-        public PartRepository(RepositoryContext context) : base(context) { }
+        private readonly IMapper _mapper;
+
+        public PartRepository(RepositoryContext context, IMapper mapper) : base(context) { _mapper = mapper; }
         public IEnumerable<PartDto> GetAllPart(bool trachChanges)
         {
             var parts = FindAll(trachChanges)

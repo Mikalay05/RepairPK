@@ -1,4 +1,5 @@
-﻿using RepairPK.Contracts;
+﻿using AutoMapper;
+using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
 
@@ -6,7 +7,11 @@ namespace RepairPK.Repository
 {
     public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRepository
     {
-        public AppointmentRepository(RepositoryContext context) : base(context) { }
+        private readonly IMapper _mapper;
+        public AppointmentRepository(RepositoryContext context, IMapper mapper) : base(context) 
+        { 
+            _mapper = mapper;
+        }
         public IEnumerable<AppointmentDto> GetAllAppointments(bool trachChanges)
         {
             var appointments = FindAll(trachChanges)

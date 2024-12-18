@@ -1,4 +1,5 @@
-﻿using RepairPK.Contracts;
+﻿using AutoMapper;
+using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
 
@@ -6,7 +7,12 @@ namespace RepairPK.Repository
 {
     public class HardwareRepository : RepositoryBase<Hardware>, IHardwareRepository
     {
-        public HardwareRepository(RepositoryContext context) : base(context) { }
+        private readonly IMapper _mapper;
+
+        public HardwareRepository(RepositoryContext context, IMapper mapper) : base(context)
+        {
+            _mapper = mapper;
+        }
         public IEnumerable<HardwareDto> GetAllHardwares(bool trachChanges)
         {
             var hardwares = FindAll(trachChanges)
