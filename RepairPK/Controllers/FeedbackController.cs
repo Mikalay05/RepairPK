@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
+using RepairPK.Repository;
 
 namespace RepairPK.Controllers
 {
@@ -13,11 +14,23 @@ namespace RepairPK.Controllers
             _feedbackRepository = feedbackRepository;
         }
         [HttpGet]
-        public IActionResult GetFeedbacks()
+        public IActionResult GetAllFeedbacks()
         {
             var feedbacks = _feedbackRepository.GetAllFeedbacks(trackChanges: true);
 
             return Ok(feedbacks);
+        }
+        [HttpGet("{id}", Name = "GetFeedbackById")]
+        public IActionResult GetFeedbackById(int id)
+        {
+            var feedback = _feedbackRepository.GetFeedback(id, true);
+
+            if (feedback == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(feedback);
         }
 
     }
