@@ -37,5 +37,21 @@ namespace RepairPK.Repository
             var customerToReturn = _mapper.Map<CustomerDto>(customerEntity);
             return customerToReturn;
         }
+        public IEnumerable<CustomerDto> GetByIds(IEnumerable<int> ids, bool trachChanges)
+        {
+            if(ids is null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            var customersEntities = FindByCondition(c=> ids.Contains(c.Id), trachChanges).ToList();
+
+            if (ids.Count() != customersEntities.Count())
+                throw new ArgumentException();
+
+            var customersToReturn = _mapper.Map<IEnumerable<CustomerDto>>(customersEntities);
+
+            return customersToReturn;
+        }
     }
 }

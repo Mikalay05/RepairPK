@@ -6,7 +6,7 @@ using RepairPK.Repository;
 namespace RepairPK.Controllers
 {
     [ApiController]
-    [Route("api/appointment")] 
+    [Route("api/appointment")]
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentRepository _appointmentRepository;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
@@ -28,12 +29,46 @@ namespace RepairPK.Repository
             var repairDto = _mapper.Map<RepairDto>(repair);
             return repairDto;
         }
-        public RepairDto CreateRepair(RepairForCreationDto  repairDto)
+        public RepairDto CreateRepair(int perentId ,int? partId, RepairForCreationDto  objectDto, bool trachChanges)
         {
-            var  repairEntity = _mapper.Map<Repair>( repairDto);
-            Create( repairEntity);
-            var repairToReturn = _mapper.Map<RepairDto>( repairEntity);
-            return  repairToReturn;
+            var perentObject = _context.Set<Hardware>()
+                .Where(c => c.Id.Equals(perentId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (perentObject is null)
+            {
+                throw new DllNotFoundException();
+            }
+
+
+            if (partId != null)
+            {
+                var part = _context.Set<Part>()
+                .Where(p => p.Id.Equals(partId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+                if (part is null)
+                {
+                    throw new DllNotFoundException();
+                }
+            }
+
+
+
+            if (objectDto is null)
+            {
+                throw new ArgumentNullException(nameof(objectDto), "Repair cannot be null");
+            }
+            var objectEntity = _mapper.Map<Repair>(objectDto);
+            objectEntity.HardwareId = perentId;
+            objectEntity.PartId = partId;
+
+            Create(objectEntity);
+
+            var objectToReturn = _mapper.Map<RepairDto>(objectEntity);
+            return objectToReturn;
         }
     }
 }
