@@ -28,5 +28,12 @@ namespace RepairPK.Repository
             var partDto = _mapper.Map<PartDto>(part);
             return partDto;
         }
+        public PartDto CreatePart(PartForCreationDto partDto)
+        {
+            var partEntity = _mapper.Map<Part>(partDto);
+            Create(partEntity);
+            var partToReturn = _mapper.Map<PartDto>(partEntity);
+            return partToReturn;
+        }
     }
 }

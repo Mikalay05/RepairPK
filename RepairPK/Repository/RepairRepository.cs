@@ -28,5 +28,12 @@ namespace RepairPK.Repository
             var repairDto = _mapper.Map<RepairDto>(repair);
             return repairDto;
         }
+        public RepairDto CreateRepair(RepairForCreationDto  repairDto)
+        {
+            var  repairEntity = _mapper.Map<Repair>( repairDto);
+            Create( repairEntity);
+            var repairToReturn = _mapper.Map<RepairDto>( repairEntity);
+            return  repairToReturn;
+        }
     }
 }

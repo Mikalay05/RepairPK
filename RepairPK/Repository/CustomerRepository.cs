@@ -30,5 +30,12 @@ namespace RepairPK.Repository
             var customerDto = _mapper.Map<CustomerDto>(customer);
             return customerDto;
         }
+        public CustomerDto CreateCustomer(CustomerForCreationDto customerDto)
+        {
+            var customerEntity = _mapper.Map<Customer>(customerDto);
+            Create(customerEntity);
+            var customerToReturn = _mapper.Map<CustomerDto>(customerEntity);
+            return customerToReturn;
+        }
     }
 }

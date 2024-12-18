@@ -31,6 +31,12 @@ namespace RepairPK.Repository
             return appointmentDto;
         }
 
-
+        public AppointmentDto CreateAppointment(AppointmentForCreationDto appointmentDto)
+        {
+            var appointmentEntity = _mapper.Map<Appointment>(appointmentDto);
+            Create(appointmentEntity);
+            var appointmentToReturn = _mapper.Map<AppointmentDto>(appointmentEntity);
+            return appointmentToReturn;
+        }
     }
 }

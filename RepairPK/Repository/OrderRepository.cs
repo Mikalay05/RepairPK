@@ -28,5 +28,12 @@ namespace RepairPK.Repository
             var orderDto = _mapper.Map<OrderDto>(order);
             return orderDto;
         }
+        public OrderDto CreateOrder(OrderForCreationDto orderDto)
+        {
+            var orderEntity = _mapper.Map<Order>(orderDto);
+            Create(orderEntity);
+            var orderToReturn = _mapper.Map<OrderDto>(orderEntity);
+            return orderToReturn;
+        }
     }
 }

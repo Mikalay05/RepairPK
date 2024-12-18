@@ -31,5 +31,12 @@ namespace RepairPK.Repository
             var feedbackDto = _mapper.Map<FeedbackDto>(feedback);
             return feedbackDto;
         }
+        public FeedbackDto CreateFeedback(FeedbackForCreationDto feedbackDto)
+        {
+            var feedbackEntity = _mapper.Map<Feedback>(feedbackDto);
+            Create(feedbackEntity);
+            var feedbackToReturn = _mapper.Map<FeedbackDto>(feedbackEntity);
+            return feedbackToReturn;
+        }
     }
 }

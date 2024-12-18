@@ -31,5 +31,12 @@ namespace RepairPK.Repository
             var hardwareDto = _mapper.Map<HardwareDto>(hardware);
             return hardwareDto;
         }
+        public HardwareDto CreateHardware(HardwareForCreationDto hardwareDto)
+        {
+            var hardwareEntity = _mapper.Map<Hardware>(hardwareDto);
+            Create(hardwareEntity);
+            var hardwareToReturn = _mapper.Map<HardwareDto>(hardwareEntity);
+            return hardwareToReturn;
+        }
     }
 }
