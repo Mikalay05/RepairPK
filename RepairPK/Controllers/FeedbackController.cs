@@ -7,7 +7,7 @@ namespace RepairPK.Controllers
 {
     [ApiController]
     [Route("api/user/{customerId}/feedback")]
-    public class FeedbackController: ControllerBase
+    public class FeedbackController : ControllerBase
     {
         private readonly IFeedbackRepository _feedbackRepository;
         public FeedbackController(IFeedbackRepository feedbackRepository)
@@ -36,7 +36,7 @@ namespace RepairPK.Controllers
         [HttpPost]
         public IActionResult CreateFeedback(int customerId, [FromBody] FeedbackForCreationDto feedbackForCreationDto)
         {
-            if(feedbackForCreationDto is null)
+            if (feedbackForCreationDto is null)
             {
                 return BadRequest("FeedbackForCreationDto object is nul");
             }
@@ -48,7 +48,6 @@ namespace RepairPK.Controllers
             }
             catch (CustomerNotFound ex)
             {
-                // Логируем исключение, если нужно, или добавляем дополнительную информацию
                 return NotFound($"Customer with ID {customerId} not found.");
             }
         }

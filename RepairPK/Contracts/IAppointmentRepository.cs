@@ -6,6 +6,6 @@ namespace RepairPK.Contracts
     {
         IEnumerable<AppointmentDto> GetAllAppointments(bool trackChanges);
         AppointmentDto GetAppointment(int id, bool trackChanges);
-        AppointmentDto CreateAppointment(AppointmentForCreationDto appointment);
+        AppointmentDto CreateAppointment(int customerId,AppointmentForCreationDto appointment, bool trackChanges);
     }
 }

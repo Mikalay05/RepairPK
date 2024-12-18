@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
@@ -28,10 +29,27 @@ namespace RepairPK.Repository
             var orderDto = _mapper.Map<OrderDto>(order);
             return orderDto;
         }
-        public OrderDto CreateOrder(OrderForCreationDto orderDto)
+        public OrderDto CreateOrder(int customerId, OrderForCreationDto order, bool trackChanges)
         {
-            var orderEntity = _mapper.Map<Order>(orderDto);
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (customer is null)
+            {
+                throw new CustomerNotFound();
+            }
+
+            if (order is null)
+            {
+                throw new ArgumentNullException(nameof(order), "order cannot be null");
+            }
+            var orderEntity = _mapper.Map<Order>(order);
+            orderEntity.CustomerId = customerId;
+
             Create(orderEntity);
+
             var orderToReturn = _mapper.Map<OrderDto>(orderEntity);
             return orderToReturn;
         }

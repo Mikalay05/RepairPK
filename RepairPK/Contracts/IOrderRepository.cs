@@ -6,7 +6,7 @@ namespace RepairPK.Contracts
     {
         IEnumerable<OrderDto> GetAllOrders(bool trackChanges);
         OrderDto GetOrder(int id, bool trackChanges);
-        OrderDto CreateOrder(OrderForCreationDto order);
+        OrderDto CreateOrder(int customerId,OrderForCreationDto order, bool trackChanges);
 
     }
 }
