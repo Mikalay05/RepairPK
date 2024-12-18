@@ -34,8 +34,9 @@ namespace RepairPK.Controllers
             return Ok(feedback);
         }
         [HttpPost]
-        public IActionResult CreateFeedback([FromBody] FeedbackForCreationDto feedbackForCreationDto)
+        public IActionResult CreateFeedback(int customerId, [FromBody] FeedbackForCreationDto feedbackForCreationDto)
         {
+            var customer = _context
             if (feedbackForCreationDto is null)
             {
                 return BadRequest("FeedbackForCreationDto is null");
