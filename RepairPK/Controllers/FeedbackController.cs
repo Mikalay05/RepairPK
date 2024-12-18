@@ -6,7 +6,7 @@ using RepairPK.Repository;
 namespace RepairPK.Controllers
 {
     [ApiController]
-    [Route("api/feedback")]
+    [Route("api/user/{customerId}/feedback")]
     public class FeedbackController: ControllerBase
     {
         private readonly IFeedbackRepository _feedbackRepository;
@@ -36,14 +36,21 @@ namespace RepairPK.Controllers
         [HttpPost]
         public IActionResult CreateFeedback(int customerId, [FromBody] FeedbackForCreationDto feedbackForCreationDto)
         {
-            var customer = _context
-            if (feedbackForCreationDto is null)
+            if(feedbackForCreationDto is null)
             {
-                return BadRequest("FeedbackForCreationDto is null");
+                return BadRequest("FeedbackForCreationDto object is nul");
             }
-            var createdFeedback = _feedbackRepository.CreateFeedback(feedbackForCreationDto);
 
-            return CreatedAtRoute("GetFeedbackById", new { id = createdFeedback.Id }, createdFeedback);
+            try
+            {
+                var feedbackToReturn = _feedbackRepository.CreateFeedback(customerId, feedbackForCreationDto, false);
+                return CreatedAtRoute("GetFeedbackById", new { customerId = customerId, id = feedbackToReturn.Id }, feedbackToReturn);
+            }
+            catch (CustomerNotFound ex)
+            {
+                // Логируем исключение, если нужно, или добавляем дополнительную информацию
+                return NotFound($"Customer with ID {customerId} not found.");
+            }
         }
     }
 }

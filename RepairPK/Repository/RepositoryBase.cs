@@ -38,7 +38,7 @@ namespace RepairPK.Repository
                 ? _context.Set<T>().AsNoTracking()
                 : _context.Set<T>();
         }
-
+        
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
         {
             return !trackChanges

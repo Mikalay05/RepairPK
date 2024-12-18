@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
@@ -37,6 +38,47 @@ namespace RepairPK.Repository
             Create(feedbackEntity);
             var feedbackToReturn = _mapper.Map<FeedbackDto>(feedbackEntity);
             return feedbackToReturn;
+        }
+
+        public FeedbackDto CreateFeedback(int customerId, FeedbackForCreationDto feedback, bool trackChanges)
+        {
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if(customer is null) {
+                throw new CustomerNotFound();
+            }
+
+            if(feedback is null)
+            {
+                throw new ArgumentNullException(nameof(feedback), "Feedback cannot be null");
+            }
+            var feedbackEntity = _mapper.Map<Feedback>(feedback);
+            feedbackEntity.CustomerId = customerId;
+            
+            Create(feedbackEntity);
+
+            var testToReturn = _mapper.Map<FeedbackDto>(feedbackEntity);
+            return testToReturn;
+
+        }
+    }
+
+    [Serializable]
+    public class CustomerNotFound : Exception
+    {
+        public CustomerNotFound()
+        {
+        }
+
+        public CustomerNotFound(string? message) : base(message)
+        {
+        }
+
+        public CustomerNotFound(string? message, Exception? innerException) : base(message, innerException)
+        {
         }
     }
 }
