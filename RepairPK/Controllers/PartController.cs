@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
+using RepairPK.Dto;
 using RepairPK.Repository;
 
 namespace RepairPK.Controllers
@@ -31,6 +32,17 @@ namespace RepairPK.Controllers
             }
 
             return Ok(part);
+        }
+        [HttpPost]
+        public IActionResult CreatePart([FromBody] PartForCreationDto partForCreationDto)
+        {
+            if(partForCreationDto is null)
+            {
+                return BadRequest("PartForCreationDto is null");
+            }
+            var createdPart = _partRepository.CreatePart(partForCreationDto);
+
+            return CreatedAtRoute("GetPartById", new { id = createdPart.Id }, createdPart);
         }
 
     }
