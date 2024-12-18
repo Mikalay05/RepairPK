@@ -7,5 +7,7 @@ namespace RepairPK.Contracts
     {
         IEnumerable<CustomerDto> GetAllCustomer(bool trackChanges);
         CustomerDto GetCustomer(int id, bool trackChanges);
+        CustomerDto CreateCustomer(CustomerForCreationDto customer);
+
     }
 }

@@ -6,5 +6,7 @@ namespace RepairPK.Contracts
     {
         IEnumerable<RepairDto> GetAllRepairs(bool trackChanges);
         RepairDto GetRepair(int id, bool trackChanges);
+        RepairDto CreateRepair(RepairForCreationDto repair);
+
     }
 }

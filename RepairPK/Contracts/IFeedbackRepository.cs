@@ -6,5 +6,7 @@ namespace RepairPK.Contracts
     {
         IEnumerable<FeedbackDto> GetAllFeedbacks(bool trackChanges);
         FeedbackDto GetFeedback(int id, bool trackChanges);
+        FeedbackDto CreateFeedback(FeedbackForCreationDto feedback);
+
     }
 }

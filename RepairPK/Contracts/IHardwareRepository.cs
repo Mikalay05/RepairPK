@@ -6,5 +6,7 @@ namespace RepairPK.Contracts
     {
         IEnumerable<HardwareDto> GetAllHardwares(bool trackChanges);
         HardwareDto GetHardware(int id, bool trackChanges);
+        HardwareDto CreateHardware(HardwareForCreationDto hardware);
+
     }
 }
