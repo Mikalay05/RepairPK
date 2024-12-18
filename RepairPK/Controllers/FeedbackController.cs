@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
+using RepairPK.Dto;
 using RepairPK.Repository;
 
 namespace RepairPK.Controllers
@@ -32,6 +33,16 @@ namespace RepairPK.Controllers
 
             return Ok(feedback);
         }
+        [HttpPost]
+        public IActionResult CreateFeedback([FromBody] FeedbackForCreationDto feedbackForCreationDto)
+        {
+            if (feedbackForCreationDto is null)
+            {
+                return BadRequest("FeedbackForCreationDto is null");
+            }
+            var createdFeedback = _feedbackRepository.CreateFeedback(feedbackForCreationDto);
 
+            return CreatedAtRoute("GetFeedbackById", new { id = createdFeedback.Id }, createdFeedback);
+        }
     }
 }

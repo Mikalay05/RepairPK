@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
+using RepairPK.Dto;
+using RepairPK.Repository;
 
 namespace RepairPK.Controllers
 {
@@ -30,6 +32,17 @@ namespace RepairPK.Controllers
             }
 
             return Ok(customer);
+        }
+        [HttpPost]
+        public IActionResult CreateCustomer([FromBody] CustomerForCreationDto customerForCreationDto)
+        {
+            if (customerForCreationDto is null)
+            {
+                return BadRequest("CustomerForCreationDto is null");
+            }
+            var createdCustomer = _customerRepository.CreateCustomer(customerForCreationDto);
+
+            return CreatedAtRoute("GetCustomerById", new { id = createdCustomer.Id }, createdCustomer);
         }
     }
 }

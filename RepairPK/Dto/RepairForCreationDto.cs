@@ -5,7 +5,6 @@
         DateTime RepairDate,
         string Description,
         decimal Cost,
-        int? PartId,
         int? CountPart
     );
 }
