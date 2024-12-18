@@ -28,7 +28,7 @@ namespace RepairPK.Repository
             var hardware = FindByCondition(h => h.Id.Equals(id), trachChanges)
                 .SingleOrDefault();
 
-            var hardwareDto = new HardwareDto(hardware.Id, hardware.Manufacturer, hardware.Model, hardware.SerialNumber, hardware.Type, hardware.OrderId);
+            var hardwareDto = _mapper.Map<HardwareDto>(hardware);
             return hardwareDto;
         }
     }

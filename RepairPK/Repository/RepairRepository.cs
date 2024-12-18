@@ -25,15 +25,7 @@ namespace RepairPK.Repository
             var repair = FindByCondition(r => r.Id.Equals(id), trachChanges)
                 .SingleOrDefault();
 
-            var repairDto = new RepairDto(
-                    repair.Id,
-                    repair.HardwareId,
-                    repair.RepairDate,
-                    repair.Description,
-                    repair.Cost,
-                    repair.PartId,
-                    repair.CountPart
-                );
+            var repairDto = _mapper.Map<RepairDto>(repair);
             return repairDto;
         }
     }

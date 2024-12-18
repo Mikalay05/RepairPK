@@ -25,13 +25,7 @@ namespace RepairPK.Repository
             var order = FindByCondition(o => o.Id.Equals(id), trachChanges)
                 .SingleOrDefault();
 
-            var orderDto = new OrderDto(
-                order.Id,
-                order.TotalAmount, 
-                order.CompletionDate,
-                order.PaymentStatus,
-                order.CustomerId
-                );
+            var orderDto = _mapper.Map<OrderDto>(order);
             return orderDto;
         }
     }

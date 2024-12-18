@@ -27,7 +27,7 @@ namespace RepairPK.Repository
             var appointment = FindByCondition(a => a.Id.Equals(id), trachChanges)
                 .SingleOrDefault();
 
-            var appointmentDto = new AppointmentDto(appointment.Id, appointment.CustomerId, appointment.Content, appointment.AppointmentDate);
+            var appointmentDto = _mapper.Map<AppointmentDto>(appointment);
             return appointmentDto;
         }
     }

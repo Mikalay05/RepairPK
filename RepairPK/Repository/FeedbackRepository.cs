@@ -28,7 +28,7 @@ namespace RepairPK.Repository
             var feedback = FindByCondition(f => f.Id.Equals(id), trachChanges)
                 .SingleOrDefault();
 
-            var feedbackDto = new FeedbackDto(feedback.Id, feedback.CustomerId, feedback.Rating, feedback.Comment, feedback.Date);
+            var feedbackDto = _mapper.Map<FeedbackDto>(feedback);
             return feedbackDto;
         }
     }

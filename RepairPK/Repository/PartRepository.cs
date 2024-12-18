@@ -25,7 +25,7 @@ namespace RepairPK.Repository
             var part = FindByCondition(c => c.Id.Equals(id), trachChanges)
                 .SingleOrDefault();
 
-            var partDto = new PartDto(part.Id, part.Name, part.QuantityAvailable, part.Price);
+            var partDto = _mapper.Map<PartDto>(part);
             return partDto;
         }
     }
