@@ -19,10 +19,7 @@ namespace RepairPK.Repository
                 .OrderBy(h => h.Id)
                 .ToList();
 
-            var hardwaresDto = hardwares.Select(h =>
-
-                new HardwareDto(h.Id, h.Manufacturer, h.Model, h.SerialNumber, h.Type, h.OrderId))
-                .ToList();
+            var hardwaresDto = _mapper.Map<IEnumerable<HardwareDto>>(hardwares);
 
             return hardwaresDto;
         }

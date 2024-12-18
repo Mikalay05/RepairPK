@@ -16,10 +16,7 @@ namespace RepairPK.Repository
                 .OrderBy(o => o.Id)
                 .ToList();
 
-            var ordersDto = orders.Select(o =>
-
-                new OrderDto(o.Id, o.TotalAmount, o.CompletionDate, o.PaymentStatus, o.CustomerId))
-                .ToList();
+            var ordersDto = _mapper.Map<IEnumerable<OrderDto>>(orders);
 
             return ordersDto;
         }

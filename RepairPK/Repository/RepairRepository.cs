@@ -16,18 +16,7 @@ namespace RepairPK.Repository
                 .OrderBy(r => r.Id)
                 .ToList();
 
-            var repairsDto = repairs.Select(r =>
-
-                new RepairDto(
-                    r.Id,
-                    r.HardwareId,
-                    r.RepairDate,
-                    r.Description,
-                    r.Cost,
-                    r.PartId,
-                    r.CountPart
-                    ))
-                .ToList();
+            var repairsDto = _mapper.Map<IEnumerable<RepairDto>>(repairs);
 
             return repairsDto;
         }

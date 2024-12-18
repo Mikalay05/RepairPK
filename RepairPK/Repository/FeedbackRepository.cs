@@ -19,10 +19,7 @@ namespace RepairPK.Repository
                 .OrderBy(f => f.Id)
                 .ToList();
 
-            var feedbacksDto = feedbacks.Select(f =>
-
-                new FeedbackDto(f.Id, f.CustomerId, f.Rating, f.Comment, f.Date))
-                .ToList();
+            var feedbacksDto = _mapper.Map<IEnumerable<FeedbackDto>>(feedbacks);
 
             return feedbacksDto;
         }

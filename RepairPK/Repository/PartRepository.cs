@@ -16,10 +16,7 @@ namespace RepairPK.Repository
                 .OrderBy(c => c.Id)
                 .ToList();
 
-            var partsDto = parts.Select(p =>
-
-                new PartDto(p.Id, p.Name, p.QuantityAvailable, p.Price))
-                .ToList();
+            var partsDto = _mapper.Map<IEnumerable<PartDto>>(parts);
 
             return partsDto;
         }

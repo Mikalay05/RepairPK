@@ -18,10 +18,7 @@ namespace RepairPK.Repository
                 .OrderBy(c => c.Id)
                 .ToList();
 
-            var appointmentsDto = appointments.Select(a =>
-
-                new AppointmentDto(a.Id, a.CustomerId,  a.Content, a.AppointmentDate))
-                .ToList();
+            var appointmentsDto = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
 
             return appointmentsDto;
         }
