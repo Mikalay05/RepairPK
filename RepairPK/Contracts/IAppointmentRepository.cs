@@ -1,4 +1,5 @@
 ﻿using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
 
 namespace RepairPK.Contracts
 {
@@ -11,8 +12,8 @@ namespace RepairPK.Contracts
         IEnumerable<AppointmentDto> GetAllAppointments(bool trackChanges);
         AppointmentDto GetAppointment(int id, bool trackChanges);
         // CRUD => U
-        void UpdateAppointment(int customerId, int appointmentId, );
+        void UpdateAppointment(int customerId, int appointmentId, AppointmentForUpdateDto appointmentForUpdate, bool trackChanges);
         // CRUD => D
-        void DeleteAppointment(int appoinmentId, bool trackChanges);
+        void DeleteAppointment(int customerId, int appoinmentId, bool trackChanges);
     }
 }

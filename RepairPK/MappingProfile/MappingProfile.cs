@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Models;
 
 namespace RepairPK.MappingProfile
@@ -23,6 +24,15 @@ namespace RepairPK.MappingProfile
             CreateMap<OrderForCreationDto, Order>();
             CreateMap<PartForCreationDto, Part>();
             CreateMap<RepairForCreationDto, Repair>();
+
+            CreateMap<CustomerForUpdateDto, Repair>();
+            CreateMap<AppointmentForUpdateDto, Appointment>();
+            CreateMap<FeedbackForUpdateDto, Feedback>();
+            CreateMap<HardwareForUpdateDto, Hardware>();
+            CreateMap<OrderForUpdateDto, Order>();
+            CreateMap<PartForUpdateDto, Part>();
+            CreateMap<RepairForUpdateDto, Repair>();
+
         }
     }
 }

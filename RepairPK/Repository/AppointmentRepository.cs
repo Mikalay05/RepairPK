@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Models;
+using RepairPK.Models.Exception;
 
 namespace RepairPK.Repository
 {
     public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRepository
     {
         private readonly IMapper _mapper;
-        public AppointmentRepository(RepositoryContext context, IMapper mapper) : base(context) 
-        { 
+        public AppointmentRepository(RepositoryContext context, IMapper mapper) : base(context)
+        {
             _mapper = mapper;
         }
         public IEnumerable<AppointmentDto> GetAllAppointments(bool trackChanges)
@@ -32,7 +34,7 @@ namespace RepairPK.Repository
             return appointmentDto;
         }
 
-        public AppointmentDto CreateAppointment(int customerId,AppointmentForCreationDto appointment, bool trackChanges)
+        public AppointmentDto CreateAppointment(int customerId, AppointmentForCreationDto appointment, bool trackChanges)
         {
             var customer = _context.Set<Customer>()
                 .Where(c => c.Id.Equals(customerId))
@@ -56,6 +58,57 @@ namespace RepairPK.Repository
             var appointmentToReturn = _mapper.Map<AppointmentDto>(appointmentEntity);
             return appointmentToReturn;
 
+        }
+
+        public void UpdateAppointment(int customerId, int appointmentId, AppointmentForUpdateDto appointmentForUpdate, bool trackChanges)
+        {
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault();
+            if (customer is null)
+                throw new CustomerNotFoundException(customerId);
+
+            var appointment = _context.Set<Appointment>()
+                .Where(a => a.Id.Equals(appointmentId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (appointment is null)
+                throw new AppointmentNotFoundException(appointmentId);
+
+            var appointmentEntity = FindByCondition(a => a.Id.Equals(appointment.Id), trackChanges)
+                .SingleOrDefault();
+
+            if(appointmentEntity is null)
+            {
+                throw new AppointmentNotFoundException(appointmentId);
+            }
+            _mapper.Map(appointmentForUpdate, appointmentEntity);
+            _context.SaveChanges();
+        }
+
+        public void DeleteAppointment(int customerId, int appointmentId, bool trackChanges)
+        {
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (customer is null)
+                throw new CustomerNotFoundException(customerId);
+
+
+            var appointment = _context.Set<Appointment>()
+                .Where(a => a.Id.Equals(appointmentId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (appointment is null)
+                throw new AppointmentNotFoundException(appointmentId);
+
+            Delete(appointment);
+            _context.SaveChanges();
         }
     }
 }

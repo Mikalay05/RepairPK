@@ -4,6 +4,10 @@ namespace RepairPK.Contracts
 {
     public interface IPartRepository
     {
+        // CRUD => C
+        // CRUD => R
+        // CRUD => U
+        // CRUD => D
         IEnumerable<PartDto> GetAllPart(bool trackChanges);
         PartDto GetPart(int id, bool trackChanges);
         PartDto CreatePart(PartForCreationDto part);

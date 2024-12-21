@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Repository;
 
 namespace RepairPK.Controllers
@@ -14,6 +15,28 @@ namespace RepairPK.Controllers
         {
             _appointmentRepository = appointmentRepository;
         }
+
+        // CRUD => C
+        [HttpPost]
+        public IActionResult CreateAppointment([FromQuery] int customerId, [FromBody] AppointmentForCreationDto appointmentForCreationDto)
+        {
+            if (appointmentForCreationDto is null)
+            {
+                return BadRequest("AppointmentForCreationDto object is nul");
+            }
+
+            try
+            {
+                var appointmentToReturn = _appointmentRepository.CreateAppointment(customerId, appointmentForCreationDto, false);
+                return CreatedAtRoute("GetAppointmentById", new { id = appointmentToReturn.Id }, appointmentToReturn);
+            }
+            catch (CustomerNotFound ex)
+            {
+                return NotFound($"Customer with ID {customerId} not found.");
+            }
+        }
+
+        // CRUD => R
         [HttpGet]
         public IActionResult GetAllAppointments()
         {
@@ -33,23 +56,25 @@ namespace RepairPK.Controllers
 
             return Ok(appointment);
         }
-        [HttpPost]
-        public IActionResult CreateAppointment([FromQuery] int customerId, [FromBody] AppointmentForCreationDto appointmentForCreationDto)
+        // CRUD => U
+        [HttpPut("{customerId:int}/{id:int}")]
+        public IActionResult UpdateAppointment(int customerId, int id, [FromBody] AppointmentForUpdateDto appointmentForUpdate)
         {
-            if (appointmentForCreationDto is null)
+            if(appointmentForUpdate is null)
             {
-                return BadRequest("AppointmentForCreationDto object is nul");
+                return BadRequest("AppointmentForUpdateDto object is null");
             }
-
-            try
-            {
-                var appointmentToReturn = _appointmentRepository.CreateAppointment(customerId, appointmentForCreationDto, false);
-                return CreatedAtRoute("GetAppointmentById", new { id = appointmentToReturn.Id }, appointmentToReturn);
-            }
-            catch (CustomerNotFound ex)
-            {
-                return NotFound($"Customer with ID {customerId} not found.");
-            }
+            _appointmentRepository.UpdateAppointment(customerId, id, appointmentForUpdate, trackChanges: true);
+            return NoContent();
         }
+
+        // CRUD => D
+        [HttpDelete("{customerId:int}/{id:int}")]
+        public IActionResult DeleteAppointment(int customerId, int id)
+        {
+            _appointmentRepository.DeleteAppointment(customerId, id, trackChanges: false);
+            return NoContent();
+        }
+
     }
 }
