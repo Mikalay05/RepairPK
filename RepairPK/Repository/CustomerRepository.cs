@@ -2,6 +2,7 @@
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
+using RepairPK.Models.Exception;
 
 namespace RepairPK.Repository
 {
@@ -41,13 +42,13 @@ namespace RepairPK.Repository
         {
             if(ids is null)
             {
-                throw new ArgumentNullException(nameof(ids));
+                throw new IdBadRequestException();
             }
 
             var customersEntities = FindByCondition(c=> ids.Contains(c.Id), trachChanges).ToList();
 
             if (ids.Count() != customersEntities.Count())
-                throw new ArgumentException();
+                throw new IdMismatchRequestException();
 
             var customersToReturn = _mapper.Map<IEnumerable<CustomerDto>>(customersEntities);
 

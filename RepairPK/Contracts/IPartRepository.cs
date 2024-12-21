@@ -7,6 +7,10 @@ namespace RepairPK.Contracts
         IEnumerable<PartDto> GetAllPart(bool trackChanges);
         PartDto GetPart(int id, bool trackChanges);
         PartDto CreatePart(PartForCreationDto part);
+        (IEnumerable<PartDto> parts, string ids) CreatePartCollection 
+            (IEnumerable<PartForCreationDto> partsForCreation);
+
+        IEnumerable<PartDto> GetByIds(IEnumerable<int> ids, bool trackChanges);
 
     }
 }

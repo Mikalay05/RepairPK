@@ -44,5 +44,18 @@ namespace RepairPK.Controllers
 
             return CreatedAtRoute("GetPartById", new { id = createdPart.Id }, createdPart);
         }
+        [HttpGet("collection/{ids}", Name = "PartCollection")]
+        public IActionResult GetPartCollection(string ids)
+        {
+            var idList = ids.Split(',').Select(int.Parse).ToList();
+            var result = _partRepository.GetByIds(idList, trackChanges: false);
+            return Ok(result);
+        }
+        [HttpPost("collection")]
+        public IActionResult CreatePartCollection([FromBody] IEnumerable<PartForCreationDto> partCollection)
+        {
+            var result = _partRepository.CreatePartCollection(partCollection);
+            return CreatedAtRoute("PartCollection", new { result.ids }, result.parts);
+        }
     }
 }

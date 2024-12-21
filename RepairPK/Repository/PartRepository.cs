@@ -2,6 +2,7 @@
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
+using RepairPK.Models.Exception;
 
 namespace RepairPK.Repository
 {
@@ -34,6 +35,43 @@ namespace RepairPK.Repository
             Create(partEntity);
             var partToReturn = _mapper.Map<PartDto>(partEntity);
             return partToReturn;
+        }
+
+        public (IEnumerable<PartDto> parts, string ids) CreatePartCollection(IEnumerable<PartForCreationDto> partsForCreation)
+        {
+            if(partsForCreation is null)
+            {
+                throw new PartCollectionBadRequestException();
+            }
+            var partsEntities = _mapper.Map<IEnumerable<Part>>(partsForCreation);
+            foreach (var partEntity in partsEntities)
+            {
+                Create(partEntity);
+            }
+            _context.SaveChanges();
+
+            var partCollectionResult = _mapper.Map<IEnumerable<PartDto>>(partsEntities);
+            var ids = string.Join(',', partCollectionResult.Select(p=>p.Id));
+
+            return (parts: partCollectionResult, ids: ids);
+        }
+
+        public IEnumerable<PartDto> GetByIds(IEnumerable<int> ids, bool trackChanges)
+        {
+            if(ids is null)
+            {
+                throw new IdBadRequestException();
+            }
+
+            var partsEntities = FindByCondition(p => ids.Contains(p.Id), trackChanges).ToList();
+
+            if (ids.Count() != partsEntities.Count())
+                throw new IdMismatchRequestException();
+
+            var partsToReturn = _mapper.Map<IEnumerable<PartDto>>(partsEntities);
+
+            return partsToReturn;
+
         }
     }
 }

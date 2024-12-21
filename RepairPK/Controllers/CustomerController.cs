@@ -2,6 +2,7 @@
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Repository;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RepairPK.Controllers
 {
@@ -43,6 +44,14 @@ namespace RepairPK.Controllers
             var createdCustomer = _customerRepository.CreateCustomer(customerForCreationDto);
 
             return CreatedAtRoute("GetCustomerById", new { id = createdCustomer.Id }, createdCustomer);
+        }
+        [HttpGet("collection/({ids})", Name = "CustomerCollection")]
+        public IActionResult GetCustomerCollection(string ids)
+        {
+            var idList = ids.Split(',').Select(int.Parse).ToList();
+            var customers = _customerRepository.GetByIds(idList, trackChanges: false);
+
+            return Ok(customers);
         }
     }
 }
