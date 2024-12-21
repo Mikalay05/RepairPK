@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
+using RepairPK.Models.Exception;
 
 namespace RepairPK.Repository
 {
@@ -70,5 +71,39 @@ namespace RepairPK.Repository
             var objectToReturn = _mapper.Map<RepairDto>(objectEntity);
             return objectToReturn;
         }
+        public void DeleteRepair(int hardwareId, int? partId, int repairId, bool trackChanges)
+        {
+            var hardware = _context.Set<Hardware>()
+                .Where(h => h.Id.Equals(hardwareId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (hardware is null)
+                throw new HardwareNotFoundException(hardwareId);
+
+            Part? part = null;
+            if (partId.HasValue)
+            {
+                part = _context.Set<Part>()
+                    .Where(p => p.Id.Equals(partId.Value))
+                    .AsNoTracking()
+                    .SingleOrDefault();
+
+                if (part is null)
+                    throw new PartNotFoundException(partId.Value);
+            }
+
+            var repair = _context.Set<Repair>()
+                .Where(r => r.Id.Equals(repairId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (repair is null)
+                throw new RepairNotFoundException(repairId);
+
+            Delete(repair);
+            _context.SaveChanges();
+        }
+
     }
 }

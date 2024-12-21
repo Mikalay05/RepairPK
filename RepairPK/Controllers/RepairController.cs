@@ -43,13 +43,19 @@ namespace RepairPK.Controllers
 
             try
             {
-                var objectToReturn = _repairRepository.CreateRepair(hardwareId, partId,repairForCreationDto, false);
+                var objectToReturn = _repairRepository.CreateRepair(hardwareId, partId, repairForCreationDto, false);
                 return CreatedAtRoute("GetRepairById", new { id = objectToReturn.Id }, objectToReturn);
             }
             catch (CustomerNotFound ex)
             {
                 return NotFound($"Customer with ID {hardwareId} not found.");
             }
+        }
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteRepair(int hardwareId, int? partId, int id)
+        {
+            _repairRepository.DeleteRepair(hardwareId, partId, id, false);
+            return NoContent();
         }
     }
 }
