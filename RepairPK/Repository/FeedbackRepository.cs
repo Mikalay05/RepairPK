@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Exception;
 using RepairPK.Models;
 
@@ -64,6 +65,50 @@ namespace RepairPK.Repository
             var feedbackToReturn = _mapper.Map<FeedbackDto>(feedbackEntity);
             return feedbackToReturn;
 
+        }
+
+        public void UpdateFeedback(int customerId, int id, FeedbackForUpdateDto feedbackForUpdate, bool trackChanges)
+        {
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault()
+            ??   throw new CustomerNotFoundExeption(customerId);
+
+            var feedback = _context.Set<Feedback>()
+                .Where(f => f.Id.Equals(id))
+                .AsNoTracking()
+                .SingleOrDefault()
+                ?? throw new FeedbackNotFoundException(id);
+    
+
+
+            var feedbackEntity = FindByCondition(a => a.Id.Equals(feedback.Id), trackChanges)
+                .SingleOrDefault()
+                ?? throw new FeedbackNotFoundException(feedback.Id);
+            
+            _mapper.Map(feedbackForUpdate, feedbackEntity);
+            _context.SaveChanges();
+        }
+
+        public void DeleteFeedback(int customerId, int id, bool trackChanges)
+        {
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault()
+            ?? throw new CustomerNotFoundExeption(customerId);
+
+
+            var feedback = _context.Set<Feedback>()
+                .Where(f => f.Id.Equals(id))
+                .AsNoTracking()
+                .SingleOrDefault()
+                ?? throw new FeedbackNotFoundException(id);
+
+
+            Delete(feedback);
+            _context.SaveChanges();
         }
     }
 }

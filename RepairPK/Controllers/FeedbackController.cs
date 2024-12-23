@@ -15,6 +15,28 @@ namespace RepairPK.Controllers
         {
             _feedbackRepository = feedbackRepository;
         }
+
+        // CRUD => C
+        [HttpPost]
+        public IActionResult CreateFeedback(int customerId, [FromBody] FeedbackForCreationDto feedbackForCreationDto)
+        {
+            if (feedbackForCreationDto is null)
+            {
+                return BadRequest("FeedbackForCreationDto object is nul");
+            }
+
+            try
+            {
+                var feedbackToReturn = _feedbackRepository.CreateFeedback(customerId, feedbackForCreationDto, false);
+                return base.CreatedAtRoute("GetFeedbackById", new { customerId = customerId, id = feedbackToReturn.Id }, feedbackToReturn);
+            }
+            catch (CustomerNotFoundExeption ex)
+            {
+                return base.NotFound($"Customer with ID {customerId} not found.");
+            }
+        }
+        // CRUD => R
+
         [HttpGet]
         public IActionResult GetAllFeedbacks()
         {
@@ -34,23 +56,9 @@ namespace RepairPK.Controllers
 
             return Ok(feedback);
         }
-        [HttpPost]
-        public IActionResult CreateFeedback(int customerId, [FromBody] FeedbackForCreationDto feedbackForCreationDto)
-        {
-            if (feedbackForCreationDto is null)
-            {
-                return BadRequest("FeedbackForCreationDto object is nul");
-            }
+        // CRUD => U
+        // CRUD => D
 
-            try
-            {
-                var feedbackToReturn = _feedbackRepository.CreateFeedback(customerId, feedbackForCreationDto, false);
-                return base.CreatedAtRoute("GetFeedbackById", new { customerId = customerId, id = feedbackToReturn.Id }, feedbackToReturn);
-            }
-            catch (CustomerNotFoundExeption ex)
-            {
-                return base.NotFound($"Customer with ID {customerId} not found.");
-            }
-        }
+
     }
 }
