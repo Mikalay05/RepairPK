@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RepairPK.Middleware;
+using FluentValidation;
 
 namespace RepairPK
 {
@@ -39,6 +40,7 @@ namespace RepairPK
 
             builder.Services.AddAutoMapper(typeof(Program));
 
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             var app = builder.Build();
 
             app.ConfigureExceptionHandler();
