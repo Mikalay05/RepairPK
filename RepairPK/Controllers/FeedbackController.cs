@@ -8,7 +8,7 @@ using RepairPK.Repository;
 namespace RepairPK.Controllers
 {
     [ApiController]
-    [Route("api/user/{customerId}/feedback")]
+    [Route("api/feedback")]
     public class FeedbackController : ControllerBase
     {
         private readonly IFeedbackRepository _feedbackRepository;
@@ -48,17 +48,21 @@ namespace RepairPK.Controllers
         [HttpGet("{id}", Name = "GetFeedbackById")]
         public IActionResult GetFeedbackById(int id)
         {
-            var feedback = _feedbackRepository.GetFeedback(id, true);
-
-            if (feedback == null)
+            try
             {
-                return NotFound();
+                var feedback = _feedbackRepository.GetFeedback(id, true);
+                return Ok(feedback);
+
+
+            }
+            catch (FeedbackNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
-            return Ok(feedback);
         }
         // CRUD => U
-        [HttpPut("{customerId:int}/feedback/{id:int}")]
+        [HttpPut("{customerId:int}/{id:int}")]
         public IActionResult UpdateFeedback(int customerId, int id, [FromBody] FeedbackForUpdateDto feedbackForUpdate)
         {
             if (feedbackForUpdate is null)
@@ -82,7 +86,7 @@ namespace RepairPK.Controllers
         }
 
         // CRUD => D
-        [HttpDelete("{customerId:int}/feedback/{id:int}")]
+        [HttpDelete("{customerId:int}/{id:int}")]
         public IActionResult DeleteAppointment(int customerId, int id)
         {
             try

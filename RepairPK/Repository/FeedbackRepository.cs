@@ -29,17 +29,11 @@ namespace RepairPK.Repository
         public FeedbackDto GetFeedback(int id, bool trachChanges)
         {
             var feedback = FindByCondition(f => f.Id.Equals(id), trachChanges)
-                .SingleOrDefault();
-
+                .SingleOrDefault()
+                ?? throw new FeedbackNotFoundException(id);
+            
             var feedbackDto = _mapper.Map<FeedbackDto>(feedback);
             return feedbackDto;
-        }
-        public FeedbackDto CreateFeedback(FeedbackForCreationDto feedbackDto)
-        {
-            var feedbackEntity = _mapper.Map<Feedback>(feedbackDto);
-            Create(feedbackEntity);
-            var feedbackToReturn = _mapper.Map<FeedbackDto>(feedbackEntity);
-            return feedbackToReturn;
         }
 
         public FeedbackDto CreateFeedback(int customerId, FeedbackForCreationDto feedback, bool trackChanges)
@@ -47,16 +41,10 @@ namespace RepairPK.Repository
             var customer = _context.Set<Customer>()
                 .Where(c => c.Id.Equals(customerId))
                 .AsNoTracking()
-                .SingleOrDefault();
+                .SingleOrDefault()
+                                ?? throw new CustomerNotFoundExeption(customerId);
+            
 
-            if(customer is null) {
-                throw new CustomerNotFoundExeption(customerId);
-            }
-
-            if(feedback is null)
-            {
-                throw new ArgumentNullException(nameof(feedback), "Feedback cannot be null");
-            }
             var feedbackEntity = _mapper.Map<Feedback>(feedback);
             feedbackEntity.CustomerId = customerId;
             
