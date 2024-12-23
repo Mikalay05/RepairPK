@@ -45,11 +45,11 @@ namespace RepairPK.Controllers
             try
             {
                 var objectToReturn = _repairRepository.CreateRepair(hardwareId, partId, repairForCreationDto, false);
-                return CreatedAtRoute("GetRepairById", new { id = objectToReturn.Id }, objectToReturn);
+                return base.CreatedAtRoute("GetRepairById", new { id = objectToReturn.Id }, objectToReturn);
             }
-            catch (CustomerNotFoundException ex)
+            catch (CustomerNotFoundExeption ex)
             {
-                return NotFound($"Customer with ID {hardwareId} not found.");
+                return base.NotFound($"Customer with ID {hardwareId} not found.");
             }
         }
         [HttpDelete("{id:int}")]

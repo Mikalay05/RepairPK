@@ -45,11 +45,11 @@ namespace RepairPK.Controllers
             try
             {
                 var HardwareToReturn = _hardwareRepository.CreateHardware(orderId, hardwareForCreationDto, false);
-                return CreatedAtRoute("GetHardwareById", new { id = HardwareToReturn.Id }, HardwareToReturn);
+                return base.CreatedAtRoute("GetHardwareById", new { id = HardwareToReturn.Id }, HardwareToReturn);
             }
-            catch (CustomerNotFoundException ex)
+            catch (CustomerNotFoundExeption ex)
             {
-                return NotFound($"Customer with ID {orderId} not found.");
+                return base.NotFound($"Customer with ID {orderId} not found.");
             }
         }
     }

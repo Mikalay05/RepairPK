@@ -45,11 +45,11 @@ namespace RepairPK.Controllers
             try
             {
                 var orderToReturn = _orderRepository.CreateOrder(customerId, orderForCreationDto, false);
-                return CreatedAtRoute("GetOrderById", new { id = orderToReturn.Id }, orderToReturn);
+                return base.CreatedAtRoute("GetOrderById", new { id = orderToReturn.Id }, orderToReturn);
             }
-            catch (CustomerNotFoundException ex)
+            catch (CustomerNotFoundExeption ex)
             {
-                return NotFound($"Customer with ID {customerId} not found.");
+                return base.NotFound($"Customer with ID {customerId} not found.");
             }
         }
     }

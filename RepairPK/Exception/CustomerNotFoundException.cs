@@ -2,9 +2,9 @@
 
 namespace RepairPK.Exception
 {
-    public sealed class CustomerNotFoundException : NotFoundException
+    public sealed class CustomerNotFoundExeption : NotFoundException
     {
-        public CustomerNotFoundException(int customerId) : base($"Customer id = {customerId} not foubd")
+        public CustomerNotFoundExeption(int customerId) : base($"Customer id = {customerId} not foubd")
         {
 
         }

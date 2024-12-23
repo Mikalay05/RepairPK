@@ -45,11 +45,11 @@ namespace RepairPK.Controllers
             try
             {
                 var feedbackToReturn = _feedbackRepository.CreateFeedback(customerId, feedbackForCreationDto, false);
-                return CreatedAtRoute("GetFeedbackById", new { customerId = customerId, id = feedbackToReturn.Id }, feedbackToReturn);
+                return base.CreatedAtRoute("GetFeedbackById", new { customerId = customerId, id = feedbackToReturn.Id }, feedbackToReturn);
             }
-            catch (CustomerNotFoundException ex)
+            catch (CustomerNotFoundExeption ex)
             {
-                return NotFound($"Customer with ID {customerId} not found.");
+                return base.NotFound($"Customer with ID {customerId} not found.");
             }
         }
     }

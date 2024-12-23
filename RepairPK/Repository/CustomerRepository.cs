@@ -5,6 +5,7 @@ using RepairPK.Dto;
 using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Models;
 using RepairPK.Exception;
+using RepairPK.Exception.AbstractException;
 
 namespace RepairPK.Repository
 {
@@ -28,8 +29,7 @@ namespace RepairPK.Repository
         public CustomerDto GetCustomer(int id, bool trachChanges)
         {
             var customer = FindByCondition(c => c.Id.Equals(id), trachChanges)
-                .SingleOrDefault();
-
+                .SingleOrDefault() ?? throw new CustomerNotFoundExeption(id);
             var customerDto = _mapper.Map<CustomerDto>(customer);
             return customerDto;
         }
@@ -63,18 +63,11 @@ namespace RepairPK.Repository
             var customer = _context.Set<Customer>()
                 .Where(c => c.Id.Equals(customerId))
                 .AsNoTracking()
-                .SingleOrDefault();
+                .SingleOrDefault() ?? throw new CustomerNotFoundExeption(customerId); ;
 
-            if (customer is null)
-                throw new CustomerNotFoundException(customerId);
+            var customerEntity = FindByCondition(c => c.Id.Equals(customer.Id), trackChanges)
+                .SingleOrDefault() ?? throw new CustomerNotFoundExeption(customerId); ;
 
-            var customerEntity = FindByCondition(a => a.Id.Equals(customer.Id), trackChanges)
-                .SingleOrDefault();
-
-            if (customerEntity is null)
-            {
-                throw new CustomerNotFoundException(customerId);
-            }
             _mapper.Map(customerForUpdate, customerEntity);
             _context.SaveChanges();
         }
@@ -84,10 +77,7 @@ namespace RepairPK.Repository
             var customer = _context.Set<Customer>()
                 .Where(c => c.Id.Equals(customerId))
                 .AsNoTracking()
-                .SingleOrDefault();
-
-            if (customer is null)
-                throw new CustomerNotFoundException(customerId);
+                .SingleOrDefault() ?? throw new CustomerNotFoundExeption(customerId);;
 
             Delete(customer);
             _context.SaveChanges();

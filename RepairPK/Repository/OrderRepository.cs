@@ -39,7 +39,7 @@ namespace RepairPK.Repository
 
             if (customer is null)
             {
-                throw new CustomerNotFoundException(customerId);
+                throw new CustomerNotFoundExeption(customerId);
             }
 
             if (order is null)

@@ -45,7 +45,7 @@ namespace RepairPK.Repository
 
             if (customer is null)
             {
-                throw new CustomerNotFoundException(customerId);
+                throw new CustomerNotFoundExeption(customerId);
             }
 
             if (appointment is null)
@@ -69,7 +69,7 @@ namespace RepairPK.Repository
                 .AsNoTracking()
                 .SingleOrDefault();
             if (customer is null)
-                throw new CustomerNotFoundException(customerId);
+                throw new CustomerNotFoundExeption(customerId);
 
             var appointment = _context.Set<Appointment>()
                 .Where(a => a.Id.Equals(appointmentId))
@@ -98,7 +98,7 @@ namespace RepairPK.Repository
                 .SingleOrDefault();
 
             if (customer is null)
-                throw new CustomerNotFoundException(customerId);
+                throw new CustomerNotFoundExeption(customerId);
 
 
             var appointment = _context.Set<Appointment>()

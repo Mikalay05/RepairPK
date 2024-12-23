@@ -25,7 +25,7 @@ namespace RepairPK.MappingProfile
             CreateMap<PartForCreationDto, Part>();
             CreateMap<RepairForCreationDto, Repair>();
 
-            CreateMap<CustomerForUpdateDto, Repair>();
+            CreateMap<CustomerForUpdateDto, Customer>();
             CreateMap<AppointmentForUpdateDto, Appointment>();
             CreateMap<FeedbackForUpdateDto, Feedback>();
             CreateMap<HardwareForUpdateDto, Hardware>();

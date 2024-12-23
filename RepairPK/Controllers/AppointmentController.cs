@@ -28,11 +28,11 @@ namespace RepairPK.Controllers
             try
             {
                 var appointmentToReturn = _appointmentRepository.CreateAppointment(customerId, appointmentForCreationDto, false);
-                return CreatedAtRoute("GetAppointmentById", new { id = appointmentToReturn.Id }, appointmentToReturn);
+                return base.CreatedAtRoute("GetAppointmentById", new { id = appointmentToReturn.Id }, appointmentToReturn);
             }
-            catch (CustomerNotFoundException ex)
+            catch (CustomerNotFoundExeption ex)
             {
-                return NotFound(ex.Message);
+                return base.NotFound(ex.Message);
             }
         }
 
@@ -70,13 +70,13 @@ namespace RepairPK.Controllers
             {
                 _appointmentRepository.UpdateAppointment(customerId, id, appointmentForUpdate, trackChanges: true);
             }
-            catch(CustomerNotFoundException ex)
+            catch(CustomerNotFoundExeption ex)
             {
-                return NotFound(ex.Message);
+                return base.NotFound(ex.Message);
             }
             catch (AppointmentNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return base.NotFound(ex.Message);
             }
 
             return NoContent();
@@ -89,15 +89,15 @@ namespace RepairPK.Controllers
             try
             {
                 _appointmentRepository.DeleteAppointment(customerId, id, trackChanges: false);
-                return NoContent();
+                return base.NoContent();
             }
-            catch(CustomerNotFoundException ex)
+            catch(CustomerNotFoundExeption ex)
             {
-                return NotFound(ex.Message);
+                return base.NotFound(ex.Message);
             }
             catch(AppointmentNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return base.NotFound(ex.Message);
             }
 
         }

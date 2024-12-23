@@ -49,7 +49,7 @@ namespace RepairPK.Repository
                 .SingleOrDefault();
 
             if(customer is null) {
-                throw new CustomerNotFoundException(customerId);
+                throw new CustomerNotFoundExeption(customerId);
             }
 
             if(feedback is null)
