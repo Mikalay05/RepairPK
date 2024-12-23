@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using FluentValidation.TestHelper;
+using Microsoft.AspNetCore.Diagnostics;
 using RepairPK.Exception.AbstractException;
 using RepairPK.Models.ErrorModel;
 using System.Net;
+using FluentValidation;
+
 
 namespace RepairPK.Middleware
 {
@@ -24,6 +27,7 @@ namespace RepairPK.Middleware
                         {
                             NotFoundException => StatusCodes.Status404NotFound,
                             BadRequestException => StatusCodes.Status400BadRequest,
+                            FluentValidation.ValidationException  => StatusCodes.Status422UnprocessableEntity,
                             _ => StatusCodes.Status500InternalServerError
                         };
 

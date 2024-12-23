@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
+using RepairPK.Exception;
 using RepairPK.Repository;
 using System.Security.Cryptography.X509Certificates;
 
@@ -10,10 +14,16 @@ namespace RepairPK.Controllers
     [Route("api/customer")]
     public class CustomerController : ControllerBase
     {
+        private readonly IValidator<CustomerForUpdateDto> _putValidator;
+        private readonly IValidator<CustomerForCreationDto> _postValidator;
         private readonly ICustomerRepository _customerRepository;
-        public CustomerController(ICustomerRepository customerRepository)
+        public CustomerController(ICustomerRepository customerRepository, 
+            IValidator<CustomerForCreationDto> postValidator,
+            IValidator<CustomerForUpdateDto> putValidator)
         {
             _customerRepository = customerRepository;
+            _postValidator = postValidator;
+            _putValidator = putValidator;
         }
         [HttpGet]
         public IActionResult GetAllCustomers()
@@ -41,6 +51,16 @@ namespace RepairPK.Controllers
             {
                 return BadRequest("CustomerForCreationDto is null");
             }
+
+
+            ValidationResult result = _postValidator.Validate(customerForCreationDto);
+            if(!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                return UnprocessableEntity(ModelState);
+            }
+
+
             var createdCustomer = _customerRepository.CreateCustomer(customerForCreationDto);
 
             return CreatedAtRoute("GetCustomerById", new { id = createdCustomer.Id }, createdCustomer);
