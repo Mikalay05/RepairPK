@@ -2,7 +2,7 @@
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Dto.ForUpdateDto;
-using RepairPK.Repository;
+using RepairPK.Exception;
 
 namespace RepairPK.Controllers
 {
@@ -30,7 +30,7 @@ namespace RepairPK.Controllers
                 var appointmentToReturn = _appointmentRepository.CreateAppointment(customerId, appointmentForCreationDto, false);
                 return CreatedAtRoute("GetAppointmentById", new { id = appointmentToReturn.Id }, appointmentToReturn);
             }
-            catch (CustomerNotFound ex)
+            catch (CustomerNotFoundException ex)
             {
                 return NotFound($"Customer with ID {customerId} not found.");
             }
@@ -47,24 +47,38 @@ namespace RepairPK.Controllers
         [HttpGet("{id}", Name = "GetAppointmentById")]
         public IActionResult GetAppointmentById(int id)
         {
-            var appointment = _appointmentRepository.GetAppointment(id, true);
-
-            if (appointment == null)
+            try
             {
-                return NotFound();
+                var appointment = _appointmentRepository.GetAppointment(id, true);
+                return Ok(appointment);
             }
-
-            return Ok(appointment);
+            catch (AppointmentNotFoundException ex)
+            {
+                return NotFound($"Appointment with ID {id} not found.");
+            }
+            
         }
         // CRUD => U
         [HttpPut("{customerId:int}/{id:int}")]
         public IActionResult UpdateAppointment(int customerId, int id, [FromBody] AppointmentForUpdateDto appointmentForUpdate)
         {
-            if(appointmentForUpdate is null)
+            if (appointmentForUpdate is null)
             {
                 return BadRequest("AppointmentForUpdateDto object is null");
             }
-            _appointmentRepository.UpdateAppointment(customerId, id, appointmentForUpdate, trackChanges: true);
+            try
+            {
+                _appointmentRepository.UpdateAppointment(customerId, id, appointmentForUpdate, trackChanges: true);
+            }
+            catch(CustomerNotFoundException ex)
+            {
+                return NotFound(ex);
+            }
+            catch (AppointmentNotFoundException ex)
+            {
+                return NotFound(ex);
+            }
+
             return NoContent();
         }
 

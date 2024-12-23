@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Exception;
 using RepairPK.Repository;
 
 namespace RepairPK.Controllers
@@ -46,7 +47,7 @@ namespace RepairPK.Controllers
                 var feedbackToReturn = _feedbackRepository.CreateFeedback(customerId, feedbackForCreationDto, false);
                 return CreatedAtRoute("GetFeedbackById", new { customerId = customerId, id = feedbackToReturn.Id }, feedbackToReturn);
             }
-            catch (CustomerNotFound ex)
+            catch (CustomerNotFoundException ex)
             {
                 return NotFound($"Customer with ID {customerId} not found.");
             }

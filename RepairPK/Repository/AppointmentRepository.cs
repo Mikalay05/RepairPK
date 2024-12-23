@@ -4,7 +4,7 @@ using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Models;
-using RepairPK.Models.Exception;
+using RepairPK.Exception;
 
 namespace RepairPK.Repository
 {
@@ -29,7 +29,9 @@ namespace RepairPK.Repository
         {
             var appointment = FindByCondition(a => a.Id.Equals(id), trackChanges)
                 .SingleOrDefault();
-
+            if (appointment is null) {
+                throw new AppointmentNotFoundException(id);
+                    }
             var appointmentDto = _mapper.Map<AppointmentDto>(appointment);
             return appointmentDto;
         }
@@ -43,7 +45,7 @@ namespace RepairPK.Repository
 
             if (customer is null)
             {
-                throw new CustomerNotFound();
+                throw new CustomerNotFoundException(customerId);
             }
 
             if (appointment is null)

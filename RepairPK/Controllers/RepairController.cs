@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Exception;
 using RepairPK.Repository;
 
 namespace RepairPK.Controllers
@@ -46,7 +47,7 @@ namespace RepairPK.Controllers
                 var objectToReturn = _repairRepository.CreateRepair(hardwareId, partId, repairForCreationDto, false);
                 return CreatedAtRoute("GetRepairById", new { id = objectToReturn.Id }, objectToReturn);
             }
-            catch (CustomerNotFound ex)
+            catch (CustomerNotFoundException ex)
             {
                 return NotFound($"Customer with ID {hardwareId} not found.");
             }

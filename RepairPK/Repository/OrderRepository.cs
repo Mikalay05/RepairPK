@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Exception;
 using RepairPK.Models;
 
 namespace RepairPK.Repository
@@ -38,7 +39,7 @@ namespace RepairPK.Repository
 
             if (customer is null)
             {
-                throw new CustomerNotFound();
+                throw new CustomerNotFoundException(customerId);
             }
 
             if (order is null)

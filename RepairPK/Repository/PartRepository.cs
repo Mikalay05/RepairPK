@@ -2,7 +2,7 @@
 using RepairPK.Contracts;
 using RepairPK.Dto;
 using RepairPK.Models;
-using RepairPK.Models.Exception;
+using RepairPK.Exception;
 
 namespace RepairPK.Repository
 {

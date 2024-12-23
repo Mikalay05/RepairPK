@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Models;
-using RepairPK.Models.Exception;
+using RepairPK.Exception;
 
 namespace RepairPK.Repository
 {
@@ -53,6 +55,42 @@ namespace RepairPK.Repository
             var customersToReturn = _mapper.Map<IEnumerable<CustomerDto>>(customersEntities);
 
             return customersToReturn;
+        }
+
+        public void UpdateCustomer(int customerId, CustomerForUpdateDto customerForUpdate, bool trackChanges)
+        {
+
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (customer is null)
+                throw new CustomerNotFoundException(customerId);
+
+            var customerEntity = FindByCondition(a => a.Id.Equals(customer.Id), trackChanges)
+                .SingleOrDefault();
+
+            if (customerEntity is null)
+            {
+                throw new CustomerNotFoundException(customerId);
+            }
+            _mapper.Map(customerForUpdate, customerEntity);
+            _context.SaveChanges();
+        }
+
+        public void DeleteCustomer(int customerId, bool trackChanges)
+        {
+            var customer = _context.Set<Customer>()
+                .Where(c => c.Id.Equals(customerId))
+                .AsNoTracking()
+                .SingleOrDefault();
+
+            if (customer is null)
+                throw new CustomerNotFoundException(customerId);
+
+            Delete(customer);
+            _context.SaveChanges();
         }
     }
 }

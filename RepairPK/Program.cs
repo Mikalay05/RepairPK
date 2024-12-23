@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RepairPK.Middleware;
 
 namespace RepairPK
 {
@@ -39,6 +40,8 @@ namespace RepairPK
             builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
+
+            app.ConfigureExceptionHandler();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

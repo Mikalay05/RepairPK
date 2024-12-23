@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Exception;
 using RepairPK.Models;
 
 namespace RepairPK.Repository
@@ -48,7 +49,7 @@ namespace RepairPK.Repository
                 .SingleOrDefault();
 
             if(customer is null) {
-                throw new CustomerNotFound();
+                throw new CustomerNotFoundException(customerId);
             }
 
             if(feedback is null)
@@ -63,22 +64,6 @@ namespace RepairPK.Repository
             var feedbackToReturn = _mapper.Map<FeedbackDto>(feedbackEntity);
             return feedbackToReturn;
 
-        }
-    }
-
-    [Serializable]
-    public class CustomerNotFound : Exception
-    {
-        public CustomerNotFound()
-        {
-        }
-
-        public CustomerNotFound(string? message) : base(message)
-        {
-        }
-
-        public CustomerNotFound(string? message, Exception? innerException) : base(message, innerException)
-        {
         }
     }
 }
