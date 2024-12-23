@@ -32,7 +32,7 @@ namespace RepairPK.Controllers
             }
             catch (CustomerNotFoundException ex)
             {
-                return NotFound($"Customer with ID {customerId} not found.");
+                return NotFound(ex.Message);
             }
         }
 
@@ -54,7 +54,7 @@ namespace RepairPK.Controllers
             }
             catch (AppointmentNotFoundException ex)
             {
-                return NotFound($"Appointment with ID {id} not found.");
+                return NotFound(ex.Message);
             }
             
         }
@@ -72,11 +72,11 @@ namespace RepairPK.Controllers
             }
             catch(CustomerNotFoundException ex)
             {
-                return NotFound(ex);
+                return NotFound(ex.Message);
             }
             catch (AppointmentNotFoundException ex)
             {
-                return NotFound(ex);
+                return NotFound(ex.Message);
             }
 
             return NoContent();
@@ -86,8 +86,20 @@ namespace RepairPK.Controllers
         [HttpDelete("{customerId:int}/{id:int}")]
         public IActionResult DeleteAppointment(int customerId, int id)
         {
-            _appointmentRepository.DeleteAppointment(customerId, id, trackChanges: false);
-            return NoContent();
+            try
+            {
+                _appointmentRepository.DeleteAppointment(customerId, id, trackChanges: false);
+                return NoContent();
+            }
+            catch(CustomerNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(AppointmentNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
 
     }
