@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepairPK.Contracts;
 using RepairPK.Dto;
+using RepairPK.Dto.ForUpdateDto;
 using RepairPK.Exception;
 using RepairPK.Repository;
 
@@ -57,7 +58,48 @@ namespace RepairPK.Controllers
             return Ok(feedback);
         }
         // CRUD => U
+        [HttpPut("{customerId:int}/feedback/{id:int}")]
+        public IActionResult UpdateFeedback(int customerId, int id, [FromBody] FeedbackForUpdateDto feedbackForUpdate)
+        {
+            if (feedbackForUpdate is null)
+            {
+                return BadRequest("FeedbackForUpdateDto object is null");
+            }
+            try
+            {
+                _feedbackRepository.UpdateFeedback(customerId, id, feedbackForUpdate, trackChanges: true);
+            }
+            catch (CustomerNotFoundExeption ex)
+            {
+                return base.NotFound(ex.Message);
+            }
+            catch (FeedbackNotFoundException ex)
+            {
+                return base.NotFound(ex.Message);
+            }
+
+            return NoContent();
+        }
+
         // CRUD => D
+        [HttpDelete("{customerId:int}/feedback/{id:int}")]
+        public IActionResult DeleteAppointment(int customerId, int id)
+        {
+            try
+            {
+                _feedbackRepository.DeleteFeedback(customerId, id, trackChanges: false);
+                return base.NoContent();
+            }
+            catch (CustomerNotFoundExeption ex)
+            {
+                return base.NotFound(ex.Message);
+            }
+            catch (FeedbackNotFoundException ex)
+            {
+                return base.NotFound(ex.Message);
+            }
+
+        }
 
 
     }
